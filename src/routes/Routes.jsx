@@ -2,9 +2,15 @@ import { createBrowserRouter } from "react-router-dom";
 import Home from "../pages/Home";
 import About from "../pages/About";
 import Contact from "../pages/Contact";
-import Products from "../pages/Products";
+// import Products from "../pages/Products";
 import MainLayout from "../layouts/MainLayout";
 import ErrorPage from "../pages/ErrorPage";
+import Company from "../pages/Company";
+import Vision from "../pages/Vision";
+import ProductDetails from "../pages/ProductDetails";
+import React, { Suspense } from "react";
+
+const Lazyproducts = React.lazy(() => import("../pages/Products"));
 
 export const router = createBrowserRouter([
   {
@@ -19,6 +25,16 @@ export const router = createBrowserRouter([
       {
         path: "/about",
         element: <About />,
+        children: [
+          {
+            path: "/about/company",
+            element: <Company />,
+          },
+          {
+            path: "/about/vision",
+            element: <Vision />,
+          },
+        ],
       },
       {
         path: "/contact",
@@ -26,7 +42,15 @@ export const router = createBrowserRouter([
       },
       {
         path: "/products",
-        element: <Products />,
+        element: (
+          <Suspense fallback={<p>Loading.....</p>}>
+            <Lazyproducts />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/products/:id",
+        element: <ProductDetails />,
       },
     ],
   },
